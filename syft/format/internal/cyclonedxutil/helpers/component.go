@@ -45,15 +45,17 @@ func EncodeComponent(p pkg.Package, supplier string, locationSorter func(a, b fi
 	}
 
 	return cyclonedx.Component{
-		Type:               componentType,
-		Name:               p.Name,
-		Group:              encodeGroup(p),
-		Version:            p.Version,
-		Supplier:           encodeSupplier(p, supplier),
-		PackageURL:         p.PURL,
-		Licenses:           encodeLicenses(p),
-		CPE:                encodeSingleCPE(p),
-		Author:             encodeAuthor(p),
+		Type:       componentType,
+		Name:       p.Name,
+		Group:      encodeGroup(p),
+		Version:    p.Version,
+		Supplier:   encodeSupplier(p, supplier),
+		PackageURL: p.PURL,
+		Licenses:   encodeLicenses(p),
+		CPE:        encodeSingleCPE(p),
+		// Deprecated: Use authors or manufacturer instead.
+		// Author:             encodeAuthor(p),
+		Authors:            EncodeAuthors(p),
 		Publisher:          encodePublisher(p),
 		Description:        encodeDescription(p),
 		ExternalReferences: encodeExternalReferences(p),
@@ -218,6 +220,7 @@ func decodePackageMetadata(vals map[string]string, c *cyclonedx.Component, typeN
 
 		// Map all explicit metadata properties
 		decodeAuthor(c.Author, metaPtr)
+		decodeAuthors(c.Authors, metaPtr)
 		decodeGroup(c.Group, metaPtr)
 		decodePublisher(c.Publisher, metaPtr)
 		decodeDescription(c.Description, metaPtr)
