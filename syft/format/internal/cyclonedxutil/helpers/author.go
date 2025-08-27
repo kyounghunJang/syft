@@ -10,9 +10,8 @@ import (
 func encodeAuthor(p pkg.Package) string {
 	if hasMetadata(p) {
 		switch metadata := p.Metadata.(type) {
-		//Deprecated: Use authors instead.
-		// case pkg.NpmPackage:
-		// 	return metadata.Author
+		case pkg.NpmPackage:
+			return metadata.Author
 		case pkg.PythonPackage:
 			author := metadata.Author
 			if metadata.AuthorEmail != "" {
